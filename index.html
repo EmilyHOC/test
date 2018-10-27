@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head >
+	<title></title>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,user-scalable=no">
+	<style type="text/css">
+		#box{
+			width:300px;
+			height:300px;
+			background-color: yellow;
+            margin:0 auto;
+            transform: rotate(45deg);
+		}
+		.content{
+			line-height: 200px;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<div class="content">手势识别</div>
+	</div>
+	<script type="text/javascript">
+		window.onload=function(){
+			let odiv=document.getElementById('box');
+			let old=45;
+			odiv.addEventListener('touchstart',(e)=>{
+              if(e.targetTouches.length>=2){
+                  let ang1=e.targetTouches[0].clientX-e.targetTouches[1].clientX;
+                  let ang2=e.targetTouches[0].clientY-e.targetTouches[1].clientY;
+                  let ang=Math.atan2(ang2,ang1)*180/Math.PI;
+                  e.preventDefault();
+                function handleMove(e){
+                  if(e.targetTouches.length>=2){
+                    let a=e.targetTouches[0].clientX-e.targetTouches[1].clientX;
+                    let b=e.targetTouches[0].clientY-e.targetTouches[1].clientY;
+                    let ang2=Math.atan2(a,b)*180/Math.PI;
+                    odiv.style.transform=`rotate(${old+ang2-ang}deg)`;
+                    e.preventDefault();
+                  }
+                };
+                function handleEnd(){
+                  odiv.removeEventListener("touchend",handleEnd,false);
+                  odiv.removeEventListener("touchmove",handleMove,false);
+                };
+                odiv.addEventListener("touchmove",handleMove,false);
+                odiv.addEventListener("touchend",handleEnd,false);
+              }
+            },false);
+		}
+	</script>
+</body>
+</html>
